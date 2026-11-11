@@ -1,0 +1,13 @@
+{
+  "name": "nova-elements",
+  "version": "0.3.0",
+  "private": true,
+  "scripts": {
+    "build": "sass --style=compressed --no-source-map assets/scss/tokens.scss:assets/css/tokens.min.css assets/scss/heading.scss:assets/css/heading.min.css assets/scss/admin.scss:assets/css/admin.min.css assets/scss/style-picker.scss:assets/css/style-picker.min.css assets/scss/blog-grid.scss:assets/css/blog-grid.min.css assets/scss/feature-card.scss:assets/css/feature-card.min.css assets/scss/advanced-button.scss:assets/css/advanced-button.min.css assets/scss/testimonials.scss:assets/css/testimonials.min.css && terser assets/js/admin.js --compress --mangle --output assets/js/admin.min.js",
+    "check": "node --check assets/js/admin.js && node --check assets/js/admin.min.js"
+  },
+  "devDependencies": {
+    "sass": "1.89.2",
+    "terser": "5.43.1"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "nova-elements/nova-elements",
+  "description": "Design-focused Elementor widgets for WordPress.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "NovaElements\\": "includes/"
+    }
+  },
+  "scripts": {
+    "test": "@php tests/smoke.php"
+  }
+}
