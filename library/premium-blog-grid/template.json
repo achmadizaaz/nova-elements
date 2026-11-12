@@ -1,0 +1,86 @@
+{
+  "version": "0.4",
+  "type": "container",
+  "title": "Premium Blog Grid",
+  "page_settings": [],
+  "content": [
+    {
+      "id": "2a61c01",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "boxed",
+        "boxed_width": {
+          "unit": "px",
+          "size": 1180,
+          "sizes": []
+        },
+        "flex_direction": "column",
+        "flex_gap": {
+          "unit": "px",
+          "column": 24,
+          "row": 24,
+          "isLinked": true
+        },
+        "padding": {
+          "unit": "px",
+          "top": 60,
+          "right": 36,
+          "bottom": 60,
+          "left": 36,
+          "isLinked": false
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": 32,
+          "right": 18,
+          "bottom": 32,
+          "left": 18,
+          "isLinked": false
+        },
+        "background_background": "classic",
+        "background_color": "#F7F7FD"
+      },
+      "elements": [
+        {
+          "id": "2a61c02",
+          "elType": "widget",
+          "widgetType": "ne-advanced-heading",
+          "settings": {
+            "style_preset": "editorial",
+            "title": "Ideas worth sharing",
+            "subtitle": "Stories and practical perspectives from our editorial team.",
+            "heading_tag": "h2"
+          },
+          "elements": []
+        },
+        {
+          "id": "2a61c03",
+          "elType": "widget",
+          "widgetType": "ne-blog-grid",
+          "settings": {
+            "style_preset": "gradient",
+            "heading_tag": "h3",
+            "post_type": "post",
+            "posts_per_page": 4,
+            "orderby": "date",
+            "order": "DESC",
+            "columns": 3,
+            "columns_tablet": 2,
+            "columns_mobile": 1,
+            "image": "yes",
+            "image_size": "large",
+            "excerpt": "yes",
+            "excerpt_words": 18,
+            "date": "yes",
+            "author": "",
+            "term": "yes",
+            "pagination": "yes",
+            "pagination_label": "Journal pages"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ]
+}

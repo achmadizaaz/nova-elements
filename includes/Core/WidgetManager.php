@@ -33,7 +33,10 @@ final class WidgetManager {
 
 	public function register_widgets( \Elementor\Widgets_Manager $manager ): void {
 		foreach ( $this->active_widgets() as $definition ) {
-			$this->assets->register_widget_style( $definition['style'] );
+			$this->assets->register_widget_style( $definition['style'], $definition['base_style'] ?? '' );
+			if ( isset( $definition['script'] ) ) {
+				$this->assets->register_widget_script( $definition['script'] );
+			}
 			$manager->register( new $definition['class']() );
 		}
 	}

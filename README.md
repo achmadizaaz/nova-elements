@@ -1,6 +1,6 @@
 # Nova Elements
 
-Nova Elements is a WordPress plugin for Elementor. It ships Advanced Heading, Blog Grid, Feature Card, Advanced Button, and Testimonials with five visual layouts each, a widget manager, and global design themes. See [architecture](docs/architecture.md), the [reference widget guide](docs/reference-widgets.md), and the [design system and picker guide](docs/phase-5.md).
+Nova Elements is a WordPress plugin for Elementor. It ships Advanced Heading, Blog Grid, Feature Card, Advanced Button, and Testimonials with five visual layouts each, a widget manager, global design themes, and a [local template library](docs/phase-6.md). See [architecture](docs/architecture.md), the [reference widget guide](docs/reference-widgets.md), and the [design system and picker guide](docs/phase-5.md).
 
 ## Setup
 
@@ -9,7 +9,7 @@ Nova Elements is a WordPress plugin for Elementor. It ships Advanced Heading, Bl
 3. From the plugin directory run `composer install --no-dev --optimize-autoloader`. The minified assets are in the source tree. To rebuild them, run `npm ci` followed by `npm run build`.
 4. Activate Elementor, then Nova Elements. Open the Nova Elements dashboard and insert Advanced Heading into an Elementor page.
 
-For a distribution, include `nova-elements.php`, `uninstall.php`, `readme.txt`, `LICENSE`, `includes/`, `templates/`, Composer's generated `vendor/`, and `assets/` with the sources and compiled files. Package them under one `nova-elements/` directory.
+For a distribution, include `nova-elements.php`, `uninstall.php`, `readme.txt`, `LICENSE`, `includes/`, `templates/`, `library/`, Composer's generated `vendor/`, and `assets/` with the sources and compiled files. Package them under one `nova-elements/` directory.
 
 ## Structure
 
@@ -18,6 +18,7 @@ For a distribution, include `nova-elements.php`, `uninstall.php`, `readme.txt`, 
 | `includes/Core` | Bootstrap, compatibility gates, settings, design tokens, registry, widget and asset registration |
 | `includes/Admin`, `templates/admin` | Admin hooks, settings and dashboard views |
 | `includes/Widgets`, `templates/widgets` | Elementor controls and escaped frontend rendering |
+| `includes/TemplateLibrary`, `library` | Local template discovery, validation, import, and reference bundles |
 | `assets/scss`, `assets/js`, `assets/css` | Scoped styles, admin behavior and production assets |
 | `tests` | Standalone checks and widget integration tests for a disposable WordPress installation |
 | `docs` | Design reference, architecture and verification |

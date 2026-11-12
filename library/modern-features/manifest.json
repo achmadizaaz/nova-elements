@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "id": "modern-features",
+  "name": "Modern Features",
+  "description": "An architectural image anchors a service overview with two concise capability cards.",
+  "type": "section",
+  "category": "features",
+  "style": "corporate",
+  "version": "1.0.0",
+  "elementor_min": "3.20.0",
+  "required_widgets": [
+    "ne-advanced-heading",
+    "ne-feature-card"
+  ],
+  "assets": [
+    {
+      "element": "3a61c05",
+      "file": "architecture.webp",
+      "alt": "Sunlit modern building with a geometric facade"
+    }
+  ]
+}

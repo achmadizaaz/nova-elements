@@ -1,0 +1,170 @@
+{
+  "version": "0.4",
+  "type": "container",
+  "title": "Corporate Hero",
+  "page_settings": [],
+  "content": [
+    {
+      "id": "1a61c01",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "boxed",
+        "boxed_width": {
+          "unit": "px",
+          "size": 1180,
+          "sizes": []
+        },
+        "flex_direction": "row",
+        "flex_gap": {
+          "unit": "px",
+          "column": 24,
+          "row": 24,
+          "isLinked": true
+        },
+        "padding": {
+          "unit": "px",
+          "top": 72,
+          "right": 36,
+          "bottom": 72,
+          "left": 36,
+          "isLinked": false
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": 32,
+          "right": 18,
+          "bottom": 32,
+          "left": 18,
+          "isLinked": false
+        },
+        "background_background": "classic",
+        "background_color": "#EDF2FC",
+        "flex_direction_mobile": "column",
+        "flex_align_items": "center",
+        "flex_justify_content": "space-between"
+      },
+      "elements": [
+        {
+          "id": "1a61c02",
+          "elType": "container",
+          "isInner": true,
+          "settings": {
+            "content_width": "full",
+            "width": {
+              "unit": "%",
+              "size": 57,
+              "sizes": []
+            },
+            "width_mobile": {
+              "unit": "%",
+              "size": 100,
+              "sizes": []
+            },
+            "flex_direction": "column",
+            "flex_gap": {
+              "unit": "px",
+              "column": 20,
+              "row": 20,
+              "isLinked": true
+            },
+            "padding": {
+              "unit": "px",
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0,
+              "isLinked": false
+            }
+          },
+          "elements": [
+            {
+              "id": "1a61c03",
+              "elType": "widget",
+              "widgetType": "ne-advanced-heading",
+              "settings": {
+                "style_preset": "corporate",
+                "title": "Build a better place to work.",
+                "subtitle": "Workplace strategy for teams making room for their next chapter.",
+                "heading_tag": "h1",
+                "title_typography_typography": "custom",
+                "title_typography_font_size": {
+                  "unit": "px",
+                  "size": 60,
+                  "sizes": []
+                },
+                "title_typography_font_size_mobile": {
+                  "unit": "px",
+                  "size": 35,
+                  "sizes": []
+                }
+              },
+              "elements": []
+            },
+            {
+              "id": "1a61c04",
+              "elType": "widget",
+              "widgetType": "ne-advanced-button",
+              "settings": {
+                "style_preset": "corporate",
+                "label": "Visit the homepage",
+                "icon_type": "arrow",
+                "link": {
+                  "url": "/"
+                }
+              },
+              "elements": []
+            }
+          ]
+        },
+        {
+          "id": "1a61c05",
+          "elType": "container",
+          "isInner": true,
+          "settings": {
+            "content_width": "full",
+            "width": {
+              "unit": "%",
+              "size": 39,
+              "sizes": []
+            },
+            "width_mobile": {
+              "unit": "%",
+              "size": 100,
+              "sizes": []
+            },
+            "padding": {
+              "unit": "px",
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0,
+              "isLinked": false
+            }
+          },
+          "elements": [
+            {
+              "id": "1a61c06",
+              "elType": "widget",
+              "widgetType": "ne-feature-card",
+              "settings": {
+                "heading_tag": "h3",
+                "cta_label": "",
+                "style_preset": "dark",
+                "eyebrow": "Workplace strategy",
+                "title": "Design for the way people work.",
+                "description": "Connect space planning, everyday collaboration, and employee experience in one practical workplace strategy.",
+                "media_type": "icon",
+                "feature_icon": {
+                  "value": "fas fa-building",
+                  "library": "fa-solid"
+                }
+              },
+              "elements": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 {
   "name": "nova-elements",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
-    "build": "sass --style=compressed --no-source-map assets/scss/tokens.scss:assets/css/tokens.min.css assets/scss/heading.scss:assets/css/heading.min.css assets/scss/admin.scss:assets/css/admin.min.css assets/scss/style-picker.scss:assets/css/style-picker.min.css assets/scss/blog-grid.scss:assets/css/blog-grid.min.css assets/scss/feature-card.scss:assets/css/feature-card.min.css assets/scss/advanced-button.scss:assets/css/advanced-button.min.css assets/scss/testimonials.scss:assets/css/testimonials.min.css && terser assets/js/admin.js --compress --mangle --output assets/js/admin.min.js",
-    "check": "node --check assets/js/admin.js && node --check assets/js/admin.min.js"
+    "build": "sass --style=compressed --no-source-map assets/scss/tokens.scss:assets/css/tokens.min.css assets/scss/heading.scss:assets/css/heading.min.css assets/scss/admin.scss:assets/css/admin.min.css assets/scss/style-picker.scss:assets/css/style-picker.min.css assets/scss/blog-grid.scss:assets/css/blog-grid.min.css assets/scss/blog-collection.scss:assets/css/blog-collection.min.css assets/scss/blog-editorial.scss:assets/css/blog-editorial.min.css assets/scss/blog-context.scss:assets/css/blog-context.min.css assets/scss/post-meta.scss:assets/css/post-meta.min.css assets/scss/feature-card.scss:assets/css/feature-card.min.css assets/scss/content-cards.scss:assets/css/content-cards.min.css assets/scss/advanced-button.scss:assets/css/advanced-button.min.css assets/scss/testimonials.scss:assets/css/testimonials.min.css assets/scss/library.scss:assets/css/library.min.css assets/scss/interactive-panels.scss:assets/css/interactive-panels.min.css && terser assets/js/admin.js --compress --mangle --output assets/js/admin.min.js && terser assets/js/library.js --compress --mangle --output assets/js/library.min.js && terser assets/js/blog-carousel.js --compress --mangle --output assets/js/blog-carousel.min.js && terser assets/js/interactive-panels.js --compress --mangle --output assets/js/interactive-panels.min.js",
+    "check": "node --check assets/js/admin.js && node --check assets/js/admin.min.js && node --check assets/js/library.js && node --check assets/js/library.min.js && node --check assets/js/blog-carousel.js && node --check assets/js/blog-carousel.min.js && node --check assets/js/interactive-panels.js && node --check assets/js/interactive-panels.min.js"
   },
   "devDependencies": {
     "sass": "1.89.2",

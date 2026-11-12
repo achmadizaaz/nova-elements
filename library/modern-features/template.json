@@ -1,0 +1,202 @@
+{
+  "version": "0.4",
+  "type": "container",
+  "title": "Modern Features",
+  "page_settings": [],
+  "content": [
+    {
+      "id": "3a61c01",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "boxed",
+        "boxed_width": {
+          "unit": "px",
+          "size": 1180,
+          "sizes": []
+        },
+        "flex_direction": "column",
+        "flex_gap": {
+          "unit": "px",
+          "column": 24,
+          "row": 24,
+          "isLinked": true
+        },
+        "padding": {
+          "unit": "px",
+          "top": 60,
+          "right": 36,
+          "bottom": 60,
+          "left": 36,
+          "isLinked": false
+        },
+        "padding_mobile": {
+          "unit": "px",
+          "top": 32,
+          "right": 18,
+          "bottom": 32,
+          "left": 18,
+          "isLinked": false
+        },
+        "background_background": "classic",
+        "background_color": "#EDF2FA"
+      },
+      "elements": [
+        {
+          "id": "3a61c02",
+          "elType": "widget",
+          "widgetType": "ne-advanced-heading",
+          "settings": {
+            "style_preset": "corporate",
+            "title": "Spaces shaped around people",
+            "subtitle": "Three ways we make complex projects easier to deliver.",
+            "heading_tag": "h2"
+          },
+          "elements": []
+        },
+        {
+          "id": "3a61c03",
+          "elType": "container",
+          "isInner": true,
+          "settings": {
+            "content_width": "full",
+            "flex_direction": "row",
+            "flex_direction_mobile": "column",
+            "flex_gap": {
+              "unit": "px",
+              "column": 20,
+              "row": 20,
+              "isLinked": true
+            },
+            "padding": {
+              "unit": "px",
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0,
+              "isLinked": false
+            }
+          },
+          "elements": [
+            {
+              "id": "3a61c04",
+              "elType": "container",
+              "isInner": true,
+              "settings": {
+                "content_width": "full",
+                "width": {
+                  "unit": "%",
+                  "size": 55,
+                  "sizes": []
+                },
+                "width_mobile": {
+                  "unit": "%",
+                  "size": 100,
+                  "sizes": []
+                },
+                "padding": {
+                  "unit": "px",
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "isLinked": false
+                }
+              },
+              "elements": [
+                {
+                  "id": "3a61c05",
+                  "elType": "widget",
+                  "widgetType": "ne-feature-card",
+                  "settings": {
+                    "heading_tag": "h3",
+                    "cta_label": "",
+                    "style_preset": "editorial",
+                    "eyebrow": "01 / Research",
+                    "title": "Understand the people and the place",
+                    "description": "Turn interviews and observations into a clear brief for the spaces people use every day.",
+                    "media_type": "image",
+                    "feature_image": {
+                      "id": 0,
+                      "url": ""
+                    }
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "3a61c06",
+              "elType": "container",
+              "isInner": true,
+              "settings": {
+                "content_width": "full",
+                "width": {
+                  "unit": "%",
+                  "size": 41,
+                  "sizes": []
+                },
+                "width_mobile": {
+                  "unit": "%",
+                  "size": 100,
+                  "sizes": []
+                },
+                "flex_direction": "column",
+                "flex_gap": {
+                  "unit": "px",
+                  "column": 18,
+                  "row": 18,
+                  "isLinked": true
+                },
+                "padding": {
+                  "unit": "px",
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0,
+                  "isLinked": false
+                }
+              },
+              "elements": [
+                {
+                  "id": "3a61c07",
+                  "elType": "widget",
+                  "widgetType": "ne-feature-card",
+                  "settings": {
+                    "heading_tag": "h3",
+                    "cta_label": "",
+                    "style_preset": "corporate",
+                    "eyebrow": "02 / Planning",
+                    "title": "Decide with confidence",
+                    "description": "Compare layouts and priorities before construction commitments are made.",
+                    "media_type": "icon",
+                    "feature_icon": {
+                      "value": "fas fa-compass",
+                      "library": "fa-solid"
+                    }
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "3a61c08",
+                  "elType": "widget",
+                  "widgetType": "ne-feature-card",
+                  "settings": {
+                    "heading_tag": "h3",
+                    "cta_label": "",
+                    "style_preset": "dark",
+                    "eyebrow": "03 / Delivery",
+                    "title": "Keep the work coordinated",
+                    "description": "Give decision makers a shared view of scope, milestones, and responsibilities.",
+                    "media_type": "none"
+                  },
+                  "elements": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -20,6 +20,8 @@ namespace {
 	use NovaElements\Core\StylePresetRegistry;
 	use NovaElements\Core\WidgetManager;
 	use NovaElements\Core\WidgetRegistry;
+	use NovaElements\TemplateLibrary\TemplateContent;
+	use NovaElements\TemplateLibrary\TemplateRegistry;
 	use NovaElements\Widgets\Heading\AdvancedHeadingWidget;
 
 	define( 'ABSPATH', __DIR__ );
@@ -105,4 +107,70 @@ namespace {
 	$render->invoke( $widget );
 	$html = ob_get_clean();
 	check( str_contains( $html, 'nova-heading--creative' ) && str_contains( $html, '<h3 ' ) && ! str_contains( $html, 'nova-heading__subtitle' ), 'An explicit preset overrides site defaults and empty subtitles are omitted.' );
+
+	$library = new TemplateRegistry( dirname( __DIR__ ) . '/library', $registry );
+	check( count( $library->all() ) >= 3, 'The three reference templates are discoverable.' );
+	check( array( 'premium-blog-grid' ) === array_keys( $library->filter( 'PREMIUM', 'section', 'blog' ) ), 'Catalog search combines case-insensitive text, type and category.' );
+	check( ! $library->file( '../corporate-hero', 'manifest.json' ) && ! $library->file( 'corporate-hero', '../template.json' ), 'Catalog rejects path traversal.' );
+	foreach ( $library->all() as $key => $manifest ) {
+		$file = $library->file( $key, 'template.json' );
+		$document = $file ? TemplateRegistry::read_json( $file, 262144 ) : null;
+		check( is_array( $document ) && TemplateContent::valid( $document, $manifest ), "$key passes native document validation." );
+		$desktop = $library->file( $key, 'preview.webp' );
+		$tablet = $library->file( $key, 'preview-tablet.webp' );
+		$mobile = $library->file( $key, 'preview-mobile.webp' );
+		check( $desktop && $tablet && $mobile && IMAGETYPE_WEBP === ( getimagesize( $desktop )[2] ?? null )
+			&& IMAGETYPE_WEBP === ( getimagesize( $tablet )[2] ?? null )
+			&& IMAGETYPE_WEBP === ( getimagesize( $mobile )[2] ?? null ), "$key bundles desktop, tablet and mobile WebP previews." );
+	}
+	$blog = $library->find( 'premium-blog-grid' );
+	$export = TemplateRegistry::read_json( $library->file( 'premium-blog-grid', 'template.json' ), 262144 );
+	$query_settings = &$export['content'][0]['elements'][1]['settings'];
+	$query_settings['pagination_mode'] = 'numbers';
+	$query_settings['taxonomy_filters'] = array( array( '_id' => 'a123456', 'filter_taxonomy' => 'category', 'filter_terms' => '12', 'filter_operator' => 'IN' ) );
+	$query_settings['query_meta_operator'] = '>';
+	check( TemplateContent::valid( $export, $blog ), 'Template validation preserves advanced Blog Grid query controls.' );
+	$query_settings['taxonomy_filters'][0]['unexpected'] = 'value';
+	check( ! TemplateContent::valid( $export, $blog ), 'Template validation rejects unlisted taxonomy repeater fields.' );
+	unset( $query_settings );
+	foreach ( array( 'ne-blog-list', 'ne-blog-masonry', 'ne-blog-carousel', 'ne-featured-posts', 'ne-magazine-layout', 'ne-post-timeline', 'ne-related-posts' ) as $name ) {
+		$variant = TemplateRegistry::read_json( $library->file( 'premium-blog-grid', 'template.json' ), 262144 );
+		$variant['content'][0]['elements'][1]['widgetType'] = $name;
+		$variant['content'][0]['elements'][1]['settings']['query_source'] = 'related';
+		$manifest = array( 'required_widgets' => array( 'ne-advanced-heading', $name ) ) + $blog;
+		if ( 'ne-blog-carousel' === $name ) {
+			$variant['content'][0]['elements'][1]['settings']['carousel_dots'] = 'yes';
+		}
+		check( TemplateContent::valid( $variant, $manifest ), "$name is allowed in native templates with saved query settings." );
+	}
+
+	$meta_template = TemplateRegistry::read_json( $library->file( 'premium-blog-grid', 'template.json' ), 262144 );
+	$meta_widget = &$meta_template['content'][0]['elements'][1];
+	$meta_widget['widgetType'] = 'ne-advanced-post-meta';
+	$meta_widget['settings'] = array( 'style_preset' => 'editorial', 'meta_items' => array( array( 'meta_field' => 'author', 'meta_link' => 'yes' ) ) );
+	$meta_manifest = array( 'required_widgets' => array( 'ne-advanced-heading', 'ne-advanced-post-meta' ) ) + $blog;
+	check( TemplateContent::valid( $meta_template, $meta_manifest ), 'Native templates accept the Advanced Post Meta field repeater.' );
+	$meta_widget['settings']['meta_items'][0]['url'] = '/unexpected';
+	check( ! TemplateContent::valid( $meta_template, $meta_manifest ), 'Advanced Post Meta template rows reject unknown settings.' );
+	unset( $meta_widget );
+
+	$cards = TemplateRegistry::read_json( $library->file( 'premium-blog-grid', 'template.json' ), 262144 );
+	$cards['content'][0]['elements'][1]['widgetType'] = 'ne-profile-card';
+	$cards['content'][0]['elements'][1]['settings'] = array( 'style_preset' => 'dark', 'media_type' => 'image', 'profile_source' => 'post', 'profile_post_id' => 123 );
+	$cards_manifest = array( 'required_widgets' => array( 'ne-advanced-heading', 'ne-profile-card' ) ) + $blog;
+	check( TemplateContent::valid( $cards, $cards_manifest ), 'Public-post profiles import without a bundled image.' );
+	$cards_manifest['assets'] = array( array( 'element' => $cards['content'][0]['elements'][1]['id'] ) );
+	check( ! TemplateContent::valid( $cards, $cards_manifest ), 'Public-post profiles reject an unused bundled image.' );
+
+	$hero = $library->find( 'corporate-hero' );
+	$payload = TemplateRegistry::read_json( $library->file( 'corporate-hero', 'template.json' ), 262144 );
+	$unsafe = $payload;
+	$unsafe['content'][0]['settings']['background_color'] = '#fff;display:none';
+	check( ! TemplateContent::valid( $unsafe, $hero ), 'Template validation rejects CSS injection.' );
+	$unsafe = $payload;
+	$unsafe['content'][0]['elements'][0]['elements'][1]['settings']['link']['url'] = '//external.example/';
+	check( ! TemplateContent::valid( $unsafe, $hero ), 'Template validation rejects protocol-relative links.' );
+	$unsafe = $payload;
+	$unsafe['content'][0]['elements'][0]['elements'][1]['widgetType'] = 'html';
+	check( ! TemplateContent::valid( $unsafe, $hero ), 'Template validation rejects unlisted Elementor widgets.' );
 }

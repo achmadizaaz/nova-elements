@@ -1,7 +1,7 @@
 === Nova Elements ===
 Requires at least: 6.5
 Requires PHP: 8.2
-Stable tag: 0.3.0
+Stable tag: 0.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -9,7 +9,7 @@ Design-focused Elementor widgets with scoped styles and a widget manager.
 
 == Description ==
 
-Nova Elements includes Advanced Heading, Blog Grid, Feature Card, Advanced Button, and Testimonials. Each widget offers five layouts in a visual Elementor picker. Global Styles manages site-wide themes and design tokens. Elementor 3.20 or later is required. Deleting the plugin preserves Nova Elements settings.
+Nova Elements includes Advanced Heading, Blog Grid, Feature Card, Advanced Button, and Testimonials. Each widget offers five layouts in a visual Elementor picker. Global Styles manages site-wide themes and design tokens. The local Template Library previews three editable section designs and imports them to Elementor Site Templates. Elementor 3.20 or later is required. Deleting the plugin preserves Nova Elements settings.
 
 == Installation ==
 
@@ -19,6 +19,9 @@ Nova Elements includes Advanced Heading, Blog Grid, Feature Card, Advanced Butto
 4. Open Nova Elements in wp-admin. In the Elementor widget panel, look for Advanced Heading under Nova Elements.
 
 == Changelog ==
+
+= 0.4.0 =
+* Added a local template catalog, native Elementor import, and three reference designs.
 
 = 0.3.0 =
 * Add a keyboard-accessible Visual Style Picker with thumbnails of the five widget layouts.

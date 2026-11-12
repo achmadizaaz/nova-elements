@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Nova Elements
  * Description: Design-focused widgets and site-wide styles for Elementor.
- * Version: 0.3.0
+ * Version: 0.4.0
  * Requires at least: 6.5
  * Requires PHP: 8.2
  * Requires Plugins: elementor

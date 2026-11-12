@@ -3,12 +3,15 @@
 namespace NovaElements\Core;
 
 use NovaElements\Admin\Dashboard;
+use NovaElements\Admin\TemplateLibraryPage;
 use NovaElements\Controls\VisualStylePicker;
+use NovaElements\TemplateLibrary\TemplateImporter;
+use NovaElements\TemplateLibrary\TemplateRegistry;
 
 defined( 'ABSPATH' ) || exit;
 
 final class Plugin {
-	public const VERSION = '0.3.0';
+	public const VERSION = '0.4.0';
 
 	public static function register( string $file ): void {
 		$registry = new WidgetRegistry();
@@ -18,7 +21,10 @@ final class Plugin {
 
 		if ( is_admin() ) {
 			( new Dashboard( $registry, $settings, $widgets, $assets ) )->register();
+			$templates = new TemplateRegistry( dirname( $file ) . '/library', $registry );
+			( new TemplateLibraryPage( $file, $templates, new TemplateImporter( $templates, $widgets ) ) )->register();
 		}
+		add_filter( 'elementor/finder/categories', array( TemplateLibraryPage::class, 'finder' ) );
 
 		// Install public integration hooks early, independent of plugin load order.
 		add_action( 'elementor/elements/categories_registered', array( $widgets, 'register_category' ) );

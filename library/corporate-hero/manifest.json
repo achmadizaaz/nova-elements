@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "corporate-hero",
+  "name": "Corporate Hero",
+  "description": "A split introduction with a decisive headline, primary action, and a contrasting strategy card.",
+  "type": "section",
+  "category": "hero",
+  "style": "corporate",
+  "version": "1.0.0",
+  "elementor_min": "3.20.0",
+  "required_widgets": [
+    "ne-advanced-heading",
+    "ne-advanced-button",
+    "ne-feature-card"
+  ],
+  "assets": []
+}

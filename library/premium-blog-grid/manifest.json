@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "premium-blog-grid",
+  "name": "Premium Blog Grid",
+  "description": "A magazine-style lead story with supporting posts, featured images, publication dates, and excerpts.",
+  "type": "section",
+  "category": "blog",
+  "style": "gradient",
+  "version": "1.0.0",
+  "elementor_min": "3.20.0",
+  "required_widgets": [
+    "ne-advanced-heading",
+    "ne-blog-grid"
+  ],
+  "assets": []
+}
