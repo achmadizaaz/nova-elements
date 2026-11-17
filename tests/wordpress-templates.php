@@ -221,6 +221,50 @@ Launch" === $saved[1]['settings']['service_points']
 		foreach ( $interactive as $index => list( $name, $settings ) ) {
 			nova_template_check( $name === $saved[ $index ]['widgetType'] && $settings == $saved[ $index ]['settings'], "$name retains its content, controls and preset." );
 		}
+
+		$photo = array( 'media_title' => 'Gallery photo', 'media_caption' => 'Architecture' );
+		$video = array( 'video_url' => 'https://youtu.be/M7lc1UVf-VE' ) + $photo;
+		$collections = array(
+			'ne-image-gallery' => array( 'gallery_items' => array( $photo ) ),
+			'ne-image-carousel' => array( 'gallery_items' => array( $photo ) ),
+			'ne-video-gallery' => array( 'gallery_items' => array( $video ) ),
+			'ne-video-popup' => $video,
+			'ne-before-after-slider' => array( 'initial_position' => 64 ),
+			'ne-image-hover-effects' => array( 'gallery_items' => array( $photo ) ),
+			'ne-logo-carousel' => array( 'gallery_items' => array( $photo ) ),
+			'ne-filterable-gallery' => array( 'gallery_items' => array( array( 'media_category' => 'Architecture' ) + $photo ) ),
+			'ne-image-accordion' => array( 'gallery_items' => array( $photo ) ),
+			'ne-media-showcase' => array( 'gallery_items' => array( $video, $photo ) ),
+		);
+		$manifest['required_widgets'] = array_keys( $collections );
+		$manifest['assets'] = array(
+			array( 'element' => '8d00001', 'control' => 'gallery_image_1', 'file' => 'architecture.webp', 'alt' => 'A building viewed from below.' ),
+			array( 'element' => '8d00004', 'file' => 'architecture.webp', 'alt' => 'A building viewed from below.' ),
+			array( 'element' => '8d00005', 'control' => 'before_image', 'file' => 'architecture.webp', 'alt' => 'A building viewed from below.' ),
+			array( 'element' => '8d00005', 'control' => 'after_image', 'file' => 'comparison.webp', 'alt' => 'Features preview.' ),
+			array( 'element' => '8d00010', 'control' => 'gallery_image_2', 'file' => 'architecture.webp', 'alt' => 'A building viewed from below.' ),
+		);
+		$document['content'][0]['elements'] = array();
+		foreach ( array_keys( $collections ) as $index => $name ) {
+			$document['content'][0]['elements'][] = array( 'id' => sprintf( '8d000%02d', $index + 1 ), 'elType' => 'widget', 'widgetType' => $name, 'settings' => array( 'style_preset' => 'creative' ) + $collections[ $name ], 'elements' => array() );
+		}
+		$invalid = $manifest;
+		$invalid['assets'][0]['control'] = 'gallery_image_2';
+		nova_template_check( ! NovaElements\TemplateLibrary\TemplateContent::valid( $document, $invalid ), 'Gallery imports reject image slots without an item.' );
+		$invalid_doc = $document;
+		$invalid_doc['content'][0]['elements'][2]['settings']['gallery_items'][0]['video_url'] = 'https://untrusted.example/video';
+		nova_template_check( ! NovaElements\TemplateLibrary\TemplateContent::valid( $invalid_doc, $manifest ), 'Media imports reject unknown video hosts.' );
+		nova_template_check( file_put_contents( $bundle . '/manifest.json', wp_json_encode( $manifest ) )
+			&& file_put_contents( $bundle . '/template.json', wp_json_encode( $document ) ), 'Wrote the media template fixture.' );
+		$result = ( new TemplateImporter( new TemplateRegistry( $test_root, $widgets ), $manager ) )->import( 'post-collections' );
+		nova_template_check( ! is_wp_error( $result ), 'All ten Batch 8D widgets import as native Elementor widgets.' );
+		$templates[] = $result;
+		$saved = Elementor::instance()->documents->get( $result )->get_elements_data()[0]['elements'];
+		nova_template_check( $media[0] === (int) $saved[0]['settings']['gallery_items'][0]['feature_image']['id']
+			&& $media[0] === (int) $saved[3]['settings']['feature_image']['id']
+			&& $media[0] === (int) $saved[4]['settings']['before_image']['id']
+			&& $media[0] !== (int) $saved[4]['settings']['after_image']['id']
+			&& $media[0] === (int) $saved[9]['settings']['gallery_items'][1]['feature_image']['id'], 'Media importer binds nested images, a poster, and both comparison slots.' );
 	} finally {
 		wp_delete_file( $bundle . '/manifest.json' );
 		wp_delete_file( $bundle . '/template.json' );

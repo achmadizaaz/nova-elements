@@ -106,11 +106,52 @@ if ( 'presets' === ( $argv[2] ?? '' ) ) {
 				&& ( 'ne-advanced-button-group' === $id ? array() : array( $handle ) ) === $widget->get_script_depends()
 				&& wp_style_is( $handle, 'registered' ) && wp_script_is( $handle, 'registered' ), "$id registers its controls and conditional assets" );
 		}
+		if ( 'media' === $definition['category'] ) {
+			$comparison = 'ne-before-after-slider' === $id;
+			$handle = $comparison ? 'nova-elements-interactive-panels' : 'nova-elements-media-gallery';
+			nova_check( is_array( $widget->get_controls( $comparison ? 'before_image' : 'image_ratio' ) )
+				&& array( $handle ) === $widget->get_style_depends() && array( $handle ) === $widget->get_script_depends()
+				&& wp_style_is( $handle, 'registered' ) && wp_script_is( $handle, 'registered' ), "$id registers the expected media controls and conditional assets" );
+		}
 		foreach ( NovaElements\Core\StylePresetRegistry::for_widget( $id ) as $preset ) {
 			$dimensions = getimagesize( dirname( __DIR__ ) . '/' . $preset['thumbnail'] );
 			nova_check( 320 === $dimensions[0] && 200 === $dimensions[1] && 'image/webp' === $dimensions['mime'], "$id has a local 320 by 200 WebP layout preview" );
 		}
 	}
+}
+
+if ( 'media' === ( $argv[2] ?? '' ) ) {
+	$photo = array( 'feature_image' => array( 'url' => '/fixture.webp' ), 'media_title' => 'Sample', 'media_caption' => '<b>Caption</b>', 'media_category' => 'Collection' );
+	$video = array( 'video_url' => 'https://youtu.be/M7lc1UVf-VE' ) + $photo;
+	$settings = array(
+		'ne-image-gallery' => array( 'gallery_items' => array( $photo ) ),
+		'ne-image-carousel' => array( 'gallery_items' => array( $photo, $photo ) ),
+		'ne-video-gallery' => array( 'gallery_items' => array( $video ) ),
+		'ne-video-popup' => $video,
+		'ne-before-after-slider' => array( 'before_image' => array( 'url' => '/before.webp' ), 'after_image' => array( 'url' => '/after.webp' ) ),
+		'ne-image-hover-effects' => array( 'gallery_items' => array( $photo ) ),
+		'ne-logo-carousel' => array( 'gallery_items' => array( $photo, $photo ) ),
+		'ne-filterable-gallery' => array( 'gallery_items' => array( $photo ) ),
+		'ne-image-accordion' => array( 'gallery_items' => array( $photo ) ),
+		'ne-media-showcase' => array( 'gallery_items' => array( $photo, $video ) ),
+	);
+	foreach ( $settings as $widget => $values ) {
+		foreach ( array( 'editorial', 'corporate', 'gradient', 'creative', 'dark' ) as $preset ) {
+			nova_check( str_contains( nova_render_widget( $widget, array( 'style_preset' => $preset ) + $values ), '--' . $preset ), "$widget renders $preset" );
+		}
+	}
+	$html = nova_render_widget( 'ne-video-popup', $video );
+	nova_check( ! str_contains( $html, '<iframe' ) && ! str_contains( $html, '<video' )
+		&& str_contains( $html, 'youtube-nocookie.com/embed/M7lc1UVf-VE' ), 'Video Popup renders the local poster and defers the privacy-enhanced player' );
+	$vimeo = NovaElements\Widgets\Media\VideoSource::external( 'https://vimeo.com/76979871' );
+	nova_check( 'https://player.vimeo.com/video/76979871?dnt=1&autoplay=1' === $vimeo['url'], 'Vimeo playback requests the DNT parameter' );
+	nova_check( null === NovaElements\Widgets\Media\VideoSource::external( 'https://www.youtube.com.invalid/watch?v=M7lc1UVf-VE' )
+		&& null === NovaElements\Widgets\Media\VideoSource::external( 'http://youtu.be/M7lc1UVf-VE' ), 'External providers require an exact HTTPS host' );
+	nova_check( '' === NovaElements\Widgets\Media\VideoSource::caption_track( 'https://external.example/captions.vtt' )
+		&& home_url( '/captions.vtt' ) === NovaElements\Widgets\Media\VideoSource::caption_track( home_url( '/captions.vtt' ) ), 'Local captions accept only a same-site WebVTT URL' );
+	$html = nova_render_widget( 'ne-image-gallery', array( 'lightbox' => '', 'gallery_items' => array_fill( 0, 13, $photo ) ) );
+	nova_check( 12 === substr_count( $html, '<figure ' ) && ! str_contains( $html, '<a ' )
+		&& str_contains( $html, '&lt;b&gt;Caption&lt;/b&gt;' ), 'Gallery escapes captions, limits its items and can disable lightbox' );
 }
 
 if ( 'interactive' === ( $argv[2] ?? '' ) ) {
@@ -766,4 +807,22 @@ if ( 'testimonials' === ( $argv[2] ?? '' ) ) {
 	}
 	$html = nova_render_widget( 'ne-testimonials', array( 'layout' => 'carousel', 'items' => array( $items[0] ) ) );
 	nova_check( str_contains( $html, 'nova-testimonials--grid' ) && ! str_contains( $html, 'tabindex=' ), 'A single quote does not create a redundant carousel' );
+}
+
+if ( 'team' === ( $argv[2] ?? '' ) ) {
+	$items = array(
+		array( 'title' => '<img src=x onerror=alert(1)>', 'role' => 'Board', 'footer_start' => 'Since 2021', 'image' => array( 'url' => 'javascript:alert(2)' ) ),
+		array( 'title' => 'Second member', 'role' => 'Staff <b>', 'footer_end' => 'Programs' ),
+		array( 'title' => 'Third member', 'role' => 'board' ),
+		array( 'title' => '', 'role' => 'Empty item' ),
+	);
+	foreach ( array( 'editorial', 'corporate', 'gradient', 'creative', 'dark' ) as $preset ) {
+		$html = nova_render_widget( 'ne-team', array( 'style_preset' => $preset, 'items' => $items, 'show_filter' => 'yes', 'show_badge' => 'yes', 'heading_tag' => 'h4' ) );
+		nova_check( str_contains( $html, 'nova-team--' . $preset ) && substr_count( $html, '<h4 class="nova-team__title"' ) === 3, "$preset preset and empty items skipped" );
+		nova_check( substr_count( $html, 'data-nova-team-filter=' ) === 3 && str_contains( $html, 'data-nova-team-filter="board"' ) && str_contains( $html, 'aria-pressed="true"' ), 'Roles deduplicate into an All button and one button per role' );
+		nova_check( substr_count( $html, 'class="nova-team__badge"' ) === 3 && str_contains( $html, 'Staff &lt;b&gt;' ) && str_contains( $html, '&lt;img' ) && ! str_contains( $html, '<img' ) && ! str_contains( $html, 'Empty item' ), 'Escaped badges and titles, unsafe image omitted' );
+		nova_check( substr_count( $html, 'class="nova-team__footer"' ) === 2, 'Footer renders only when one of its columns has text' );
+	}
+	$html = nova_render_widget( 'ne-team', array( 'items' => array( $items[0], $items[2] ), 'show_badge' => '' ) );
+	nova_check( ! str_contains( $html, 'nova-team__filters' ) && ! str_contains( $html, 'nova-team__badge' ), 'A single role hides the filter and the badge toggle is honoured' );
 }

@@ -1,0 +1,164 @@
+.nova-media {
+  --ne-media-ink: var(--ne-text, #0f172a);
+  --ne-media-muted: var(--ne-content-muted, #465469);
+  --ne-media-fill: var(--ne-surface, #fff);
+  --ne-media-inset: var(--ne-surface-muted, #f5f7fa);
+  --ne-media-border: var(--ne-border, #cbd5e1);
+  --ne-media-accent: var(--ne-content-link, #3730a3);
+  --ne-media-gap: .75rem;
+  --ne-media-ratio: 4 / 3;
+  display: block;
+  min-inline-size: 0;
+  container-type: inline-size;
+  contain-intrinsic-inline-size: 100vw;
+  color: var(--ne-media-ink);
+  overflow-wrap: anywhere;
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  :is(button, a, summary, [tabindex]):focus-visible { outline: 2px solid var(--ne-media-accent); outline-offset: 3px; }
+  .nova-media__items { display: grid; gap: var(--ne-media-gap); min-inline-size: 0; }
+  .nova-media__item, .nova-media__figure { min-inline-size: 0; margin: 0; background: var(--ne-media-fill); }
+  .nova-media__frame { position: relative; aspect-ratio: var(--ne-media-ratio); overflow: hidden; background: var(--ne-media-inset); }
+  .nova-media__frame img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .nova-media__open { position: absolute; inset: 0; color: var(--ne-media-accent); }
+  .nova-media__open:focus-visible { outline-offset: -4px; z-index: 1; }
+  .nova-media__action { position: absolute; inset-inline-start: .55rem; inset-block-end: .55rem; max-inline-size: calc(100% - 1.1rem); padding: .45rem .75rem; background: var(--ne-media-fill); border: 1px solid var(--ne-media-border); font-weight: 650; }
+  .nova-media__caption { padding: .75rem .9rem; color: var(--ne-media-muted); line-height: 1.45; }
+  .nova-media__caption strong { display: block; color: var(--ne-media-ink); }
+  .nova-media__caption p { margin: .25rem 0 0; white-space: pre-line; }
+  .nova-media__visually-hidden { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .nova-media__filters, .nova-media__navigation { display: flex; flex-wrap: wrap; gap: .45rem; margin-block-end: .75rem; }
+  button {
+    min-block-size: 2.75rem;
+    padding: .55rem .8rem;
+    border: 1px solid var(--ne-media-border);
+    border-radius: var(--ne-radius-sm);
+    background: var(--ne-media-fill);
+    color: var(--ne-media-accent);
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+    white-space: normal;
+    &:hover { text-decoration: underline; }
+    &[aria-pressed="true"] { box-shadow: inset 0 -.2rem var(--ne-media-accent); }
+  }
+  &.nova-media--accordion {
+    summary { padding: .75rem .9rem; min-block-size: 2.75rem; cursor: pointer; font-weight: 650; }
+    summary:focus-visible { outline-offset: -3px; }
+    .nova-media__figure { border: 0; }
+  }
+  &.nova-media--popup { --ne-media-ratio: 16 / 9; }
+  &.nova-media--videos { --ne-media-ratio: 16 / 9; }
+
+  @container (min-width: 36rem) {
+    &:not(.nova-media--accordion,.nova-media--popup,.nova-media--carousel,.nova-media--logos) .nova-media__items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  &.nova-media--editorial {
+    .nova-media__item { border-block-end: 1px solid var(--ne-media-border); }
+    .nova-media__caption strong, summary { font-family: var(--ne-font-heading, Georgia, serif); }
+    @container (min-width: 36rem) {
+      &:not(.nova-media--accordion,.nova-media--popup,.nova-media--carousel,.nova-media--logos) .nova-media__item:first-child { grid-column: 1 / -1; }
+      &:not(.nova-media--accordion,.nova-media--popup,.nova-media--carousel,.nova-media--logos) .nova-media__item:first-child .nova-media__frame { aspect-ratio: var(--ne-media-ratio-override, 2.4); }
+    }
+  }
+  &.nova-media--corporate {
+    .nova-media__item { border: 1px solid var(--ne-media-border); border-inline-start: .25rem solid var(--ne-primary); }
+    .nova-media__caption { background: var(--ne-media-inset); }
+    .nova-media__navigation { justify-content: flex-end; }
+    @container (min-width: 45rem) {
+      &:not(.nova-media--accordion,.nova-media--popup,.nova-media--carousel,.nova-media--logos) .nova-media__items { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      &.nova-media--popup .nova-media__item { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: center; }
+    }
+  }
+  &.nova-media--gradient {
+    padding: .8rem;
+    border-radius: var(--ne-radius-lg);
+    background: linear-gradient(135deg, var(--ne-soft-accent, #e0e7ff), var(--ne-soft-surface, #ecfeff));
+    .nova-media__item { border-radius: var(--ne-radius-md); overflow: clip; }
+    .nova-media__caption { text-align: center; }
+    .nova-media__filters, .nova-media__navigation { justify-content: center; }
+    button, .nova-media__action { border-radius: var(--ne-radius-full); }
+    &.nova-media--popup .nova-media__items { max-inline-size: 36rem; margin-inline: auto; }
+  }
+  &.nova-media--creative {
+    .nova-media__item { border-block-end: .25rem solid var(--ne-primary); }
+    .nova-media__caption strong, summary { font-size: clamp(1.15rem, 3cqi, 1.65rem); }
+    &.nova-media--popup, &.nova-media--accordion { --ne-media-ratio: 2.4; }
+    @container (min-width: 36rem) {
+      &:not(.nova-media--accordion,.nova-media--popup,.nova-media--carousel,.nova-media--logos) .nova-media__items { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+      &:not(.nova-media--accordion,.nova-media--popup,.nova-media--carousel,.nova-media--logos) .nova-media__item:first-child { grid-row: span 2; }
+    }
+  }
+  &.nova-media--dark {
+    --ne-media-ink: #f8fafc;
+    --ne-media-muted: #d0dbea;
+    --ne-media-fill: var(--ne-secondary, #0f172a);
+    --ne-media-inset: #26344c;
+    --ne-media-border: #475569;
+    --ne-media-accent: #a5f3fc;
+    padding: .75rem;
+    background: var(--ne-media-fill);
+    border-radius: var(--ne-radius-lg);
+    .nova-media__item { border: 1px solid var(--ne-media-border); }
+    .nova-media__caption { background: var(--ne-media-inset); }
+  }
+
+  &:is(.nova-media--carousel,.nova-media--logos) {
+    .nova-media__items {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 82%;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scroll-snap-type: inline mandatory;
+    }
+    .nova-media__item { scroll-snap-align: start; }
+    @container (min-width: 34rem) {
+      .nova-media__items { grid-auto-columns: 52%; }
+      &.nova-media--corporate .nova-media__items { grid-auto-columns: 34%; }
+      &.nova-media--creative .nova-media__items { grid-auto-columns: 72%; }
+    }
+  }
+  &.nova-media--logos {
+    --ne-media-ratio: 2 / 1;
+    .nova-media__items { grid-auto-columns: 48%; }
+    .nova-media__frame { background: #fff; }
+    .nova-media__frame img { object-fit: contain; padding: .75rem; }
+    @container (min-width: 34rem) {
+      .nova-media__items { grid-auto-columns: 28%; }
+      &.nova-media--corporate .nova-media__items { grid-auto-columns: 22%; }
+      &.nova-media--creative .nova-media__items { grid-auto-columns: 40%; }
+    }
+  }
+
+  .nova-media__dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    inline-size: min(58rem, calc(100% - 1.5rem));
+    max-inline-size: none;
+    max-block-size: calc(100% - 1.5rem);
+    padding: .75rem;
+    border: 1px solid var(--ne-media-border);
+    border-radius: var(--ne-radius-md);
+    background: var(--ne-media-fill);
+    overflow: auto;
+    &::backdrop { background: rgb(15 23 42 / .8); }
+    &:not([open]) { display: none; }
+    .nova-media__close { display: block; margin: 0 0 .65rem auto; }
+    img { display: block; max-inline-size: 100%; max-block-size: 72vh; margin-inline: auto; }
+    :is(video,iframe) { display: block; inline-size: 100%; aspect-ratio: 16 / 9; max-block-size: 72vh; border: 0; background: #0f172a; }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nova-media--hover .nova-media__frame img { transition: transform var(--ne-motion-duration, var(--ne-transition-fast, 160ms)) ease-out; }
+  .nova-media--hover .nova-media__frame:focus-within img { transform: scale(1.06); }
+  @media (hover: hover) {
+    .nova-media--hover .nova-media__frame:hover img { transform: scale(1.06); }
+    .nova-media--hover.nova-media--corporate .nova-media__frame:hover img { transform: translateY(-.2rem) scale(1.035); }
+    .nova-media--hover.nova-media--creative .nova-media__frame:hover img { transform: scale(1.12); }
+  }
+}

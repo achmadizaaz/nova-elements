@@ -15,6 +15,16 @@ use NovaElements\Widgets\Blog\PostCategoriesWidget;
 use NovaElements\Widgets\Blog\AuthorProfileWidget;
 use NovaElements\Widgets\Blog\AdvancedPostMetaWidget;
 use NovaElements\Widgets\Cards\FeatureCardWidget;
+use NovaElements\Widgets\Media\ImageGalleryWidget;
+use NovaElements\Widgets\Media\ImageCarouselWidget;
+use NovaElements\Widgets\Media\VideoGalleryWidget;
+use NovaElements\Widgets\Media\VideoPopupWidget;
+use NovaElements\Widgets\Media\BeforeAfterSliderWidget;
+use NovaElements\Widgets\Media\ImageHoverEffectsWidget;
+use NovaElements\Widgets\Media\LogoCarouselWidget;
+use NovaElements\Widgets\Media\FilterableGalleryWidget;
+use NovaElements\Widgets\Media\ImageAccordionWidget;
+use NovaElements\Widgets\Media\MediaShowcaseWidget;
 use NovaElements\Widgets\Cards\FeatureShowcaseWidget;
 use NovaElements\Widgets\Interactive\AdvancedAccordionWidget;
 use NovaElements\Widgets\Interactive\AdvancedTabsWidget;
@@ -37,6 +47,7 @@ use NovaElements\Widgets\Cards\FlipCardWidget;
 use NovaElements\Widgets\Cards\HoverCardWidget;
 use NovaElements\Widgets\Buttons\AdvancedButtonWidget;
 use NovaElements\Widgets\Testimonials\TestimonialsWidget;
+use NovaElements\Widgets\Team\TeamWidget;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -210,6 +221,16 @@ final class WidgetRegistry {
 				'base_style'  => 'feature-card',
 				'woocommerce' => false,
 			),
+			'ne-team' => array(
+				'class'       => TeamWidget::class,
+				'title'       => __( 'Team', 'nova-elements' ),
+				'description' => __( 'Show team or board members with a role badge on each image and a role filter.', 'nova-elements' ),
+				'category'    => 'cards',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-team' ) ),
+				'style'       => 'team',
+				'script'      => 'team',
+				'woocommerce' => false,
+			),
 			'ne-pricing-card' => array(
 				'class'       => PricingCardWidget::class,
 				'title'       => __( 'Pricing Card', 'nova-elements' ),
@@ -369,6 +390,106 @@ final class WidgetRegistry {
 				'script'      => 'interactive-panels',
 				'woocommerce' => false,
 			),
+			'ne-image-gallery' => array(
+				'class'       => ImageGalleryWidget::class,
+				'title'       => __( 'Image Gallery', 'nova-elements' ),
+				'description' => __( 'Image Gallery with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-image-gallery' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-image-carousel' => array(
+				'class'       => ImageCarouselWidget::class,
+				'title'       => __( 'Image Carousel', 'nova-elements' ),
+				'description' => __( 'Image Carousel with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-image-carousel' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-video-gallery' => array(
+				'class'       => VideoGalleryWidget::class,
+				'title'       => __( 'Video Gallery', 'nova-elements' ),
+				'description' => __( 'Video Gallery with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-video-gallery' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-video-popup' => array(
+				'class'       => VideoPopupWidget::class,
+				'title'       => __( 'Video Popup', 'nova-elements' ),
+				'description' => __( 'Video Popup with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-video-popup' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-before-after-slider' => array(
+				'class'       => BeforeAfterSliderWidget::class,
+				'title'       => __( 'Before/After Slider', 'nova-elements' ),
+				'description' => __( 'Before/After Slider with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-before-after-slider' ) ),
+				'style'       => 'interactive-panels',
+				'script'      => 'interactive-panels',
+				'woocommerce' => false,
+			),
+			'ne-image-hover-effects' => array(
+				'class'       => ImageHoverEffectsWidget::class,
+				'title'       => __( 'Image Hover Effects', 'nova-elements' ),
+				'description' => __( 'Image Hover Effects with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-image-hover-effects' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-logo-carousel' => array(
+				'class'       => LogoCarouselWidget::class,
+				'title'       => __( 'Logo Carousel', 'nova-elements' ),
+				'description' => __( 'Logo Carousel with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-logo-carousel' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-filterable-gallery' => array(
+				'class'       => FilterableGalleryWidget::class,
+				'title'       => __( 'Filterable Gallery', 'nova-elements' ),
+				'description' => __( 'Filterable Gallery with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-filterable-gallery' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-image-accordion' => array(
+				'class'       => ImageAccordionWidget::class,
+				'title'       => __( 'Image Accordion', 'nova-elements' ),
+				'description' => __( 'Image Accordion with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-image-accordion' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
+			'ne-media-showcase' => array(
+				'class'       => MediaShowcaseWidget::class,
+				'title'       => __( 'Media Showcase', 'nova-elements' ),
+				'description' => __( 'Media Showcase with responsive media and five visual presets.', 'nova-elements' ),
+				'category'    => 'media',
+				'presets'     => array_keys( StylePresetRegistry::for_widget( 'ne-media-showcase' ) ),
+				'style'       => 'media-gallery',
+				'script'      => 'media-gallery',
+				'woocommerce' => false,
+			),
 			'ne-advanced-button' => array(
 				'class'       => AdvancedButtonWidget::class,
 				'title'       => __( 'Advanced Button', 'nova-elements' ),
@@ -396,6 +517,7 @@ final class WidgetRegistry {
 			'posts' => __( 'Blog & Posts', 'nova-elements' ),
 			'cards' => __( 'Cards & Content Blocks', 'nova-elements' ),
 			'interactive' => __( 'Interactive Elements', 'nova-elements' ),
+			'media' => __( 'Media & Gallery', 'nova-elements' ),
 		);
 	}
 }

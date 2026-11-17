@@ -1,0 +1,174 @@
+.nova-team {
+  container-type: inline-size;
+  // Give Elementor's column flex layout a width during intrinsic measurement.
+  contain-intrinsic-inline-size: 100vw;
+  --ne-team-gap: var(--ne-layout-gap, clamp(.9rem, 2.5vw, 1.6rem));
+  --ne-team-text: var(--ne-text);
+  --ne-team-muted: var(--ne-content-muted, #475569);
+  --ne-team-accent: var(--ne-content-link, #3730a3);
+  --ne-team-ratio: 4 / 5;
+  color: var(--ne-team-text);
+
+  .nova-team__filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 var(--ne-team-gap); }
+  .nova-team__filter {
+    margin: 0;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--ne-border);
+    border-radius: 999px;
+    color: var(--ne-team-text);
+    background: var(--ne-surface);
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background-color var(--ne-motion-duration, 160ms), border-color var(--ne-motion-duration, 160ms), color var(--ne-motion-duration, 160ms);
+    &:hover { border-color: var(--ne-primary); }
+    &:focus-visible { outline: 2px solid #4338ca; outline-offset: 2px; }
+    &[aria-pressed="true"] { border-color: var(--ne-primary); color: #fff; background: var(--ne-primary); }
+  }
+
+  .nova-team__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--ne-team-count, var(--ne-team-default-count, 3)), minmax(0, 1fr));
+    gap: var(--ne-team-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .nova-team__item { min-inline-size: 0; margin: 0; padding: 0; &[hidden] { display: none; } }
+
+  .nova-team__card {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    margin: 0;
+    color: inherit;
+    background: var(--ne-surface);
+    box-shadow: var(--ne-card-edge, 0 0 transparent), var(--ne-card-shadow, var(--ne-team-preset-shadow, 0 0 transparent));
+    overflow: hidden;
+    overflow-wrap: anywhere;
+  }
+
+  .nova-team__media {
+    position: relative;
+    flex: none;
+    aspect-ratio: var(--ne-team-ratio);
+    overflow: hidden;
+    background: var(--ne-surface-muted);
+    img { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform var(--ne-motion-duration, 300ms) ease; }
+  }
+  .nova-team__media--empty { aspect-ratio: auto; min-block-size: 3rem; background: none; }
+  .nova-team__card:hover .nova-team__media img { transform: scale(1.04); }
+
+  // The role badge sits in the image's top-left corner (top-right under RTL via logical insets).
+  .nova-team__badge {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 0.75rem;
+    max-inline-size: calc(100% - 1.5rem);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    color: #fff;
+    background: var(--ne-primary);
+    box-shadow: 0 4px 12px -6px #0f172a;
+    font-size: 0.72rem;
+    font-weight: 650;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nova-team__body { display: flex; flex: 1; flex-direction: column; gap: 0.4rem; padding: clamp(1rem, 2.4cqi, 1.5rem); }
+  .nova-team__title { margin: 0; color: inherit; font-family: var(--ne-font-heading, var(--ne-font-primary, inherit)); font-size: calc(var(--ne-type-scale, 1) * 1.2rem); line-height: 1.25; }
+  .nova-team__subtitle { margin: 0; color: var(--ne-team-accent); font-size: 0.9rem; font-weight: 600; }
+  .nova-team__description { margin: 0.25rem 0 0; color: var(--ne-team-muted); font-size: 0.92rem; line-height: 1.6; white-space: pre-line; }
+  .nova-team__footer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-block-start: auto;
+    padding-block-start: 0.85rem;
+    border-block-start: 1px solid var(--ne-border);
+    color: var(--ne-team-muted);
+    font-size: 0.82rem;
+    > span:first-child { text-align: start; }
+    > span:last-child { text-align: end; }
+  }
+
+  .nova-team__empty { margin: 0; padding: 1rem; border: 1px solid var(--ne-border); color: var(--ne-text); background: var(--ne-surface); }
+  @container (max-width: 53rem) { .nova-team__grid { --ne-team-default-count: 2; } }
+  @container (max-width: 34rem) { .nova-team__grid { --ne-team-default-count: 1; } }
+}
+
+.nova-team--editorial {
+  .nova-team__card { background: transparent; }
+  .nova-team__body { padding-inline: 0; }
+  .nova-team__title { font-family: var(--ne-font-heading, var(--ne-font-primary, Georgia, serif)); font-size: calc(var(--ne-type-scale, 1) * 1.45rem); font-weight: 500; }
+  .nova-team__subtitle { color: var(--ne-team-muted); font-weight: 400; font-style: italic; }
+  .nova-team__badge { border-radius: 0; color: var(--ne-text); background: var(--ne-surface); box-shadow: none; }
+  .nova-team__footer { border-block-start-color: var(--ne-text); }
+}
+
+.nova-team--corporate {
+  --ne-team-ratio: 1;
+  .nova-team__card { --ne-team-preset-shadow: 0 14px 22px -22px #0f172a; border: 1px solid var(--ne-border); border-radius: var(--ne-radius-md); }
+  .nova-team__badge { border-radius: var(--ne-radius-sm); }
+  .nova-team__body { border-block-start: 3px solid var(--ne-primary); }
+  .nova-team__footer { margin-inline: calc(-1 * clamp(1rem, 2.4cqi, 1.5rem)); margin-block-end: calc(-1 * clamp(1rem, 2.4cqi, 1.5rem)); padding: 0.75rem clamp(1rem, 2.4cqi, 1.5rem); background: var(--ne-surface-muted); }
+}
+
+.nova-team--gradient {
+  --ne-team-ratio: 1;
+  .nova-team__card {
+    padding: 0.8rem;
+    text-align: center;
+    border: 1px solid #dddff5;
+    border-radius: var(--ne-radius-xl);
+    background: radial-gradient(ellipse at 50% 0%, var(--ne-soft-accent, #e0e7ff), transparent 65%), linear-gradient(160deg, var(--ne-surface), var(--ne-soft-surface, #ecfeff));
+  }
+  .nova-team__media { border-radius: calc(var(--ne-radius-xl) - 0.5rem); }
+  .nova-team__badge { background: linear-gradient(135deg, var(--ne-primary), var(--ne-accent)); }
+  .nova-team__body { align-items: center; }
+  .nova-team__footer { align-self: stretch; border-block-start-style: dashed; }
+}
+
+.nova-team--creative {
+  --ne-team-ratio: 3 / 4;
+  .nova-team__card { position: relative; isolation: isolate; color: #fff; background: var(--ne-secondary); }
+  .nova-team__media { position: absolute; inset: 0; z-index: -1; aspect-ratio: auto; }
+  .nova-team__media::after { position: absolute; inset: 0; content: ""; background: linear-gradient(180deg, transparent 35%, #0f172ae6 100%); }
+  .nova-team__media--empty { position: static; }
+  .nova-team__badge { border-radius: 0 0 var(--ne-radius-sm) 0; inset-block-start: 0; inset-inline-start: 0; padding: 0.5rem 0.9rem; box-shadow: none; }
+  .nova-team__body { justify-content: flex-end; min-block-size: clamp(20rem, 60cqi, 28rem); }
+  .nova-team__title { font-size: calc(var(--ne-type-scale, 1) * clamp(1.5rem, 1rem + 1.5cqi, 2.1rem)); font-weight: 800; letter-spacing: var(--ne-tracking-tight, -0.02em); line-height: 1.05; }
+  .nova-team__subtitle { color: #a5f3fc; }
+  .nova-team__description, .nova-team__footer { color: #e2e8f0; }
+  .nova-team__footer { margin-block-start: 0.4rem; border-block-start-color: #ffffff4d; }
+}
+
+.nova-team--dark {
+  --ne-team-text: #f8fafc;
+  --ne-team-muted: #cbd5e1;
+  --ne-team-accent: #a5f3fc;
+  .nova-team__card { --ne-team-preset-shadow: inset 0 0 0 .36rem #ffffff08; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); border: 1px solid #475569; border-radius: var(--ne-radius-lg); background: var(--ne-secondary); }
+  .nova-team__media { aspect-ratio: auto; min-block-size: 100%; background: #1e293b; }
+  .nova-team__media--empty { display: none; }
+  .nova-team__media--empty ~ .nova-team__body { grid-column: 1 / -1; }
+  .nova-team__badge { border: 1px solid #a5f3fc66; color: #0f172a; background: #a5f3fc; }
+  .nova-team__title { font-family: var(--ne-font-heading, var(--ne-font-primary, Georgia, serif)); }
+  .nova-team__footer { border-block-start-color: #475569; }
+  .nova-team__filter { border-color: #475569; color: var(--ne-text); }
+}
+.nova-team--dark .nova-team__grid { --ne-team-default-count: 2; }
+@container (max-width: 53rem) { .nova-team--dark .nova-team__grid { --ne-team-default-count: 1; } }
+@container (max-width: 26rem) { .nova-team--dark .nova-team__card { grid-template-columns: 1fr; } .nova-team--dark .nova-team__media { aspect-ratio: 4 / 3; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .nova-team .nova-team__media img, .nova-team .nova-team__filter { transition: none; }
+  .nova-team .nova-team__card:hover .nova-team__media img { transform: none; }
+}

@@ -512,3 +512,85 @@ In Elementor, changed a tooltip description, the toggle initial state, a marker 
 The shared CSS and JavaScript measure 22,616 and 5,510 bytes before compression. The 35 new thumbnails total 125712 bytes. All 17 unrelated generated assets matched their originals.
 
 All ten Batch 8C widgets are implemented. The native importer covers all ten in one fixture. The iteration reports document frontend and editor verification for all ten on the tested stack. Manual screen-reader checks, physical touch devices, other browser engines, Elementor Pro Dynamic Tags, and the minimum supported WordPress, Elementor, and PHP versions remain unverified.
+
+## Batch 8D — Media & Gallery
+
+| Iteration | Widgets |
+| --- | --- |
+| 1 | Image Gallery, Image Carousel, Video Gallery |
+| 2 | Video Popup, Before/After Slider, Image Hover Effects |
+| 3 | Logo Carousel, Filterable Gallery, Image Accordion |
+| 4 | Media Showcase |
+
+All ten widgets register Minimal Editorial, Modern Corporate, Premium Gradient, Bold Creative, and Elegant Dark. Every preset has a 320 × 200 WebP captured from the corresponding WordPress fixture. The styles vary the grid, featured item, image ratio, caption treatment, control placement, and carousel slide width. The previews use the CC0 art-gallery.webp, green-staircase.webp, and building-exterior.webp photos from Twenty Twenty-Four. [Twenty Twenty-Four asset credits](https://themes.trac.wordpress.org/browser/twentytwentyfour/1.0/readme.txt)
+
+- **Image Gallery** and **Image Carousel** use up to twelve Media Library images. Each supports a custom caption, attachment-caption fallback, aspect ratio, and an optional native lightbox. The carousel uses scroll snapping, directional keys, Previous and Next, and touch scrolling.
+- **Video Gallery** and **Video Popup** support Media Library video, a local poster, and public YouTube or Vimeo URLs. A local video takes precedence and can load a same-site WebVTT caption track. External iframes are created after activation and removed on close. YouTube uses the privacy-enhanced host and Vimeo uses the DNT parameter. [YouTube embed options](https://support.google.com/youtube/answer/171780?hl=en) [Vimeo player parameters](https://help.vimeo.com/hc/en-us/articles/12426260232977-About-Player-Parameters)
+- **Before/After Slider** reuses Image Comparison and retains its own widget ID and presets. It offers native range input, editable before and after labels, and a configurable starting point. Both figures remain readable if the script is unavailable.
+- **Image Hover Effects** uses CSS for pointer and focus treatments. Captions stay visible and reduced-motion preferences suppress the image transforms.
+- **Logo Carousel** uses contained images and shares the native carousel track. Navigation appears only when the track overflows.
+- **Filterable Gallery** groups images by editor-supplied categories. The filter buttons report the selected category and the full collection remains readable without script.
+- **Image Accordion** uses native disclosures with summaries, images, captions, and optional lightboxes.
+- **Media Showcase** accepts images and videos in the same collection and shares the deferred player and lightbox.
+
+The common renderer uses WordPress responsive image markup. Secondary attachment images are marked lazy when enabled in WordPress. The collection script and stylesheet are conditional and have no third-party runtime dependencies. Before/After Slider uses the existing interactive asset pair. Imported templates may bind an image or poster to a repeater row with gallery_image_1 through gallery_image_12. The existing image and comparison slots remain valid. Local video attachments and caption URLs are configured after import on the destination site.
+
+### Files
+
+- `includes/Widgets/Media/`, `templates/widgets/media-collection.php`, and the existing Image Comparison class provide the widgets and renderer.
+- `WidgetRegistry.php`, `StylePresetRegistry.php`, `TemplateContent.php`, and `TemplateRegistry.php` register widgets and presets and validate portable media bindings.
+- `assets/scss/media-gallery.scss`, `assets/js/media-gallery.js`, their production builds, and `package.json` provide the conditional assets. The 50 WebP thumbnails are in `assets/presets/`.
+- `tests/wordpress-widgets.php` and `tests/wordpress-templates.php` verify render, privacy parameters, caption validation, preset registration, and import.
+
+### Verification
+
+```powershell
+composer validate --strict
+composer test
+npm run build
+npm run check
+php tests/wordpress-widgets.php $wpLoad media
+php tests/wordpress-widgets.php $wpLoad presets
+php tests/wordpress-templates.php $wpLoad
+```
+
+Composer validation, 83 smoke assertions, lint across 107 PHP files, the production build, and JavaScript syntax checks passed. On WordPress 7.1.4, Elementor Free 4.4.0, PHP 8.3.17, MySQL 8.4.3, and Twenty Twenty-Four, the media suite passed 107 assertions and native template import passed 59. The interactive, card, blog, context, metadata, button, and testimonial regression suites passed.
+
+The preset suite passed 413 assertions. Chrome 157 exercised the five presets per widget, 390 px layouts, image lightbox and focus restoration, carousel scrolling, filter and disclosure controls, comparison keys and touch input, reduced-motion behavior, and readable fallbacks with scripts blocked. The legacy Feature Card page requested no media-gallery assets. The shared media assets are 8,984 bytes of CSS and 3,411 bytes of JavaScript before compression. All 19 unrelated generated assets matched their originals.
+
+The external provider requests were blocked during the browser tests. The fixture verified that the external iframe was absent before activation, that the correct player URL was assigned on activation, and that the iframe was removed on close. A locally recorded WebM played, loaded a same-site WebVTT cue, and stopped when the dialog closed. Chrome verified WordPress srcset and lazy loading with Elementor Optimized Image Loading disabled on the fixture. Elementor's default optimizer controls the loading policy when it is enabled.
+
+In Elementor, changed the collection label in nine widgets and the initial comparison percentage in Before/After Slider. Changed the preset on every widget, published, and verified all ten changes in the anonymous page and after reopening the editor.
+
+All ten Batch 8D widgets are implemented. Playback from the live YouTube and Vimeo services, manual screen-reader checks, physical touch devices, other browser engines, Elementor Pro Dynamic Tags, and the minimum supported platform versions remain unverified.
+
+## Team
+
+Team (`ne-team`, Cards & Content Blocks) shows a grid of repeater members, separate from the single-person Team Member Card. Each member has an image, title, subtitle, description, role, and a two-column footer. The role appears as an image badge and builds `aria-pressed` filter buttons. Roles with the same slug share one button, and the filter appears only when at least two roles exist. Columns are responsive with preset defaults. Without JavaScript every member stays visible.
+
+| Preset | Team |
+| --- | --- |
+| Minimal Editorial | Open portrait cards, serif names, and a ruled footer |
+| Modern Corporate | Bordered square-photo cards with an accent rail and footer panel |
+| Premium Gradient | Centered copy below an inset rounded photo on a gradient |
+| Bold Creative | Full-bleed photos with bold names over an image overlay |
+| Elegant Dark | Photo beside copy on a framed dark surface |
+
+### Files
+
+- `includes/Widgets/Team/TeamWidget.php` and `templates/widgets/team.php` provide controls and escaped rendering.
+- `WidgetRegistry.php` and `StylePresetRegistry.php` register the widget and its presets. The five 320 × 200 WebP previews are in `assets/presets/team/`.
+- `assets/scss/team.scss` and `assets/js/team.js` are the conditional asset pair. The delegated click handler works in re-rendered editor previews. `package.json` builds and checks both.
+- `tests/wordpress-widgets.php` adds the `team` suite. It covers all five presets, skipped empty rows, role deduplication, escaping, the unsafe image URL, and the footer and badge toggles.
+
+### Verification
+
+Composer validation, 84 smoke assertions, the production build, and JavaScript syntax checks passed. The rebuilt `team.min.css` matched the previous file, and no other generated asset changed.
+
+On WordPress 7.1.4, Elementor Free 4.4.0, and PHP 8.3.17, the team suite passed 27 assertions and the preset suite passed 421. The media, interactive, cards, blog, context, meta, feature, button, and testimonials regression suites passed, as did native template import with 59 assertions. The local `wp-config.php` derives the site URL from `$_SERVER`, so the suites ran with `REQUEST_SCHEME=http` and `HTTP_HOST=plugin.test`. Without them the media, context, and meta suites fail on the empty home URL. The first context run right after the plugin sync could not open `blog-grid.php`. The next two runs passed.
+
+The Chrome frontend fixture placed all five presets on one page with four members, one without a portrait. The presets rendered distinct layouts. The Board, Volunteers, and All filters updated `aria-pressed` and the visible members, and the Enter key activated a focused filter. Filtering one instance did not affect another. The page loaded only the Nova tokens stylesheet and the Team assets. At 375 px every preset used one column with no horizontal overflow, and Dark stacked its image. The console had no errors.
+
+In the Elementor editor the filter initially failed in the preview. Re-rendered widgets contain nodes from the parent window's realm, so the `instanceof Element` check in `team.js` rejected every click. The handler now calls `closest` directly. After the fix, the filter worked in the preview after a content change and after a preset change. A member title changed in the repeater and the preset changed to Bold Creative through the visual picker, both in the live preview. Both changes were published and appeared on the anonymous page and after reopening the editor.
+
+The assets keep version 0.4.0, so a browser that cached the earlier `team.min.js` keeps it until the plugin version changes. Manual screen-reader checks, physical touch devices, other browser engines, measured overlay contrast in Bold Creative, and the minimum supported platform versions remain unverified. The template library does not accept `ne-team`.

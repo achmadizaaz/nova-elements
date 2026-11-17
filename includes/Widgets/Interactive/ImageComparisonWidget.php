@@ -6,7 +6,7 @@ use Elementor\Controls_Manager;
 
 defined( 'ABSPATH' ) || exit;
 
-final class ImageComparisonWidget extends InteractiveWidget {
+class ImageComparisonWidget extends InteractiveWidget {
 	public function get_name(): string {
 		return 'ne-image-comparison';
 	}

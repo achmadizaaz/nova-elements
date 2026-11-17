@@ -4,6 +4,7 @@ namespace NovaElements\TemplateLibrary;
 
 use NovaElements\Core\StylePresetRegistry;
 use NovaElements\Query\PostQuery;
+use NovaElements\Widgets\Media\VideoSource;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -11,6 +12,7 @@ final class TemplateContent {
 	private const BLOG_SETTINGS = 'style_preset heading_tag post_type posts_per_page orderby order columns columns_tablet columns_mobile image image_size image_ratio excerpt excerpt_words date author term pagination pagination_label query_source related_taxonomy parent_id include_ids exclude_ids include_authors exclude_authors exclude_current sticky_posts taxonomy term_ids taxonomy_filters taxonomy_relation query_meta_key query_meta_operator query_meta_format query_meta_value query_meta_end query_sort_key pagination_mode date_period date_start date_end offset';
 
 	private const CARD_SETTINGS = 'style_preset eyebrow title heading_tag description media_type feature_image feature_icon cta_label link alignment panel_background_background panel_background_color';
+	private const GALLERY_SETTINGS = 'style_preset gallery_label gallery_items lightbox image_ratio media_gap media_gap_tablet media_gap_mobile';
 
 	private const SETTINGS = array(
 		'container' => 'content_width boxed_width flex_direction flex_direction_tablet flex_direction_mobile flex_wrap flex_justify_content flex_align_items flex_gap padding padding_tablet padding_mobile background_background background_color border_border border_width border_color border_radius width width_tablet width_mobile',
@@ -37,6 +39,16 @@ final class TemplateContent {
 		'ne-off-canvas-content' => 'style_preset trigger_label title heading_tag description cta_label link drawer_side panel_background_background panel_background_color',
 		'ne-advanced-button-group' => 'style_preset group_label group_items group_gap group_gap_tablet group_gap_mobile',
 		'ne-advanced-faq' => 'style_preset panel_items initial_panel allow_multiple panel_gap panel_gap_tablet panel_gap_mobile',
+		'ne-image-gallery' => self::GALLERY_SETTINGS,
+		'ne-image-carousel' => self::GALLERY_SETTINGS,
+		'ne-video-gallery' => self::GALLERY_SETTINGS,
+		'ne-video-popup' => 'style_preset gallery_label feature_image media_title media_caption video_url image_ratio',
+		'ne-before-after-slider' => 'style_preset before_image after_image before_label after_label range_label initial_position',
+		'ne-image-hover-effects' => self::GALLERY_SETTINGS,
+		'ne-logo-carousel' => self::GALLERY_SETTINGS,
+		'ne-filterable-gallery' => self::GALLERY_SETTINGS,
+		'ne-image-accordion' => self::GALLERY_SETTINGS,
+		'ne-media-showcase' => self::GALLERY_SETTINGS,
 		'ne-blog-grid' => self::BLOG_SETTINGS,
 		'ne-blog-list' => self::BLOG_SETTINGS,
 		'ne-blog-masonry' => self::BLOG_SETTINGS,
@@ -95,8 +107,12 @@ final class TemplateContent {
 
 	public static function bind_media( array &$elements, array $bindings ): void {
 		foreach ( $elements as &$element ) {
-			if ( isset( $bindings[ $element['id'] ] ) ) {
-				$element['settings'] = array_replace( $element['settings'], $bindings[ $element['id'] ] );
+			foreach ( $bindings[ $element['id'] ] ?? array() as $field => $media ) {
+				if ( preg_match( '/^gallery_image_([1-9]|1[0-2])$/D', $field, $match ) ) {
+					$element['settings']['gallery_items'][ (int) $match[1] - 1 ]['feature_image'] = $media;
+				} else {
+					$element['settings'][ $field ] = $media;
+				}
 			}
 			self::bind_media( $element['elements'], $bindings );
 		}
@@ -138,10 +154,15 @@ final class TemplateContent {
 		$profile_post = 'ne-profile-card' === $widget && 'post' === ( $settings['profile_source'] ?? '' );
 		$card_image = $is_card && 'image' === ( $settings['media_type'] ?? '' ) && ! $profile_post;
 		$allowed_assets = match ( $widget ) {
-			'ne-image-comparison' => array( 'before_image', 'after_image' ),
-			'ne-interactive-hotspot' => array( 'feature_image' ),
+			'ne-image-comparison', 'ne-before-after-slider' => array( 'before_image', 'after_image' ),
+			'ne-interactive-hotspot', 'ne-video-popup' => array( 'feature_image' ),
 			default => $card_image ? array( 'feature_image' ) : array(),
 		};
+		if ( in_array( 'gallery_items', $allowed, true ) && is_array( $settings['gallery_items'] ?? null ) ) {
+			for ( $index = 1; $index <= min( 12, count( $settings['gallery_items'] ) ); ++$index ) {
+				$allowed_assets[] = 'gallery_image_' . $index;
+			}
+		}
 		$optional_image = ! in_array( $widget, array( 'ne-feature-card', 'ne-info-card', 'ne-service-card' ), true );
 		if ( array_diff( $asset_fields, $allowed_assets ) || ( ! $asset_fields && $card_image && ! $optional_image ) ) {
 			return false;
@@ -187,6 +208,14 @@ final class TemplateContent {
 				if ( ! self::valid_rows( $value, array( '_id', 'button_label', 'button_link' ), 6, array(), 'button_link' ) ) {
 					return false;
 				}
+			} elseif ( 'gallery_items' === $key ) {
+				if ( ! self::valid_gallery_rows( $value, $widget ) ) {
+					return false;
+				}
+			} elseif ( 'video_url' === $key ) {
+				if ( '' !== $value && ! VideoSource::external( $value ) ) {
+					return false;
+				}
 			} elseif ( 'query_meta_operator' === $key ) {
 				if ( ! in_array( $value, PostQuery::META_OPERATORS, true ) ) {
 					return false;
@@ -196,11 +225,44 @@ final class TemplateContent {
 					return false;
 				}
 			} elseif ( in_array( $key, array( 'feature_image', 'before_image', 'after_image' ), true ) ) {
-				if ( ! is_array( $value ) || count( $value ) !== 2 || ! in_array( $value['id'] ?? null, array( 0, '' ), true ) || '' !== ( $value['url'] ?? null ) ) {
+				if ( ! self::empty_image( $value ) ) {
 					return false;
 				}
 			} elseif ( ! self::safe_value( $value, 0 ) ) {
 				return false;
+			}
+		}
+		return true;
+	}
+
+	private static function empty_image( mixed $value ): bool {
+		return is_array( $value ) && 2 === count( $value ) && in_array( $value['id'] ?? null, array( 0, '' ), true ) && '' === ( $value['url'] ?? null );
+	}
+
+	private static function valid_gallery_rows( mixed $rows, string $widget ): bool {
+		if ( ! is_array( $rows ) || ! array_is_list( $rows ) || count( $rows ) > 12 ) {
+			return false;
+		}
+		$keys = array( '_id', 'media_title', 'media_caption', 'feature_image' );
+		if ( in_array( $widget, array( 'ne-video-gallery', 'ne-media-showcase' ), true ) ) {
+			$keys[] = 'video_url';
+		}
+		if ( 'ne-filterable-gallery' === $widget ) {
+			$keys[] = 'media_category';
+		}
+		foreach ( $rows as $row ) {
+			if ( ! is_array( $row ) || array_diff( array_keys( $row ), $keys ) ) {
+				return false;
+			}
+			foreach ( $row as $key => $value ) {
+				$valid = match ( $key ) {
+					'feature_image' => self::empty_image( $value ),
+					'video_url' => '' === $value || null !== VideoSource::external( $value ),
+					default => is_string( $value ) && self::safe_value( $value, 0 ),
+				};
+				if ( ! $valid ) {
+					return false;
+				}
 			}
 		}
 		return true;

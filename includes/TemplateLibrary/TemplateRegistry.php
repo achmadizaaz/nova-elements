@@ -115,7 +115,8 @@ final class TemplateRegistry {
 			if ( ! is_array( $asset ) || ! is_string( $asset['element'] ?? null ) || ! preg_match( '/^[a-f0-9]{7,8}$/D', $asset['element'] )
 				|| ! is_string( $asset['file'] ?? null ) || ! preg_match( '/^[a-z0-9-]+\.webp$/D', $asset['file'] )
 				|| ! $this->label( $asset['alt'] ?? null, 180 )
-				|| ! in_array( $asset['control'] ?? 'feature_image', array( 'feature_image', 'before_image', 'after_image' ), true ) ) {
+				|| ! is_string( $asset['control'] ?? 'feature_image' )
+				|| ! preg_match( '/^(?:feature_image|before_image|after_image|gallery_image_(?:[1-9]|1[0-2]))$/D', $asset['control'] ?? 'feature_image' ) ) {
 				return false;
 			}
 		}
