@@ -124,7 +124,7 @@ final class TeamWidget extends BaseWidget {
 		}
 		$tag = $this->heading_tag( $settings['heading_tag'] ?? null );
 		$show_badge = 'yes' === ( $settings['show_badge'] ?? 'yes' );
-		$show_filter = 'yes' === ( $settings['show_filter'] ?? 'yes' ) && count( $roles ) > 1;
+		$show_filter = 'yes' === ( $settings['show_filter'] ?? 'yes' ) && $roles;
 		$all_label = $this->text_value( $settings['all_label'] ?? null ) ?: __( 'All', 'nova-elements' );
 		$filter_label = $this->text_value( $settings['filter_label'] ?? null ) ?: __( 'Filter members by role', 'nova-elements' );
 		require dirname( __DIR__, 3 ) . '/templates/widgets/team.php';

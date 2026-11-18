@@ -824,5 +824,7 @@ if ( 'team' === ( $argv[2] ?? '' ) ) {
 		nova_check( substr_count( $html, 'class="nova-team__footer"' ) === 2, 'Footer renders only when one of its columns has text' );
 	}
 	$html = nova_render_widget( 'ne-team', array( 'items' => array( $items[0], $items[2] ), 'show_badge' => '' ) );
-	nova_check( ! str_contains( $html, 'nova-team__filters' ) && ! str_contains( $html, 'nova-team__badge' ), 'A single role hides the filter and the badge toggle is honoured' );
+	nova_check( substr_count( $html, 'data-nova-team-filter=' ) === 2 && ! str_contains( $html, 'nova-team__badge' ), 'A single shared role keeps the filter and the badge toggle is honoured' );
+	$html = nova_render_widget( 'ne-team', array( 'items' => array( array( 'title' => 'No role' ) ) ) );
+	nova_check( ! str_contains( $html, 'nova-team__filters' ), 'Members without a role hide the filter' );
 }

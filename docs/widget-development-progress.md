@@ -566,7 +566,7 @@ All ten Batch 8D widgets are implemented. Playback from the live YouTube and Vim
 
 ## Team
 
-Team (`ne-team`, Cards & Content Blocks) shows a grid of repeater members, separate from the single-person Team Member Card. Each member has an image, title, subtitle, description, role, and a two-column footer. The role appears as an image badge and builds `aria-pressed` filter buttons. Roles with the same slug share one button, and the filter appears only when at least two roles exist. Columns are responsive with preset defaults. Without JavaScript every member stays visible.
+Team (`ne-team`, Cards & Content Blocks) shows a grid of repeater members, separate from the single-person Team Member Card. Each member has an image, title, subtitle, description, role, and a two-column footer. The role appears as an image badge and builds `aria-pressed` filter buttons. Roles with the same slug share one button. The filter appears whenever at least one member has a role. Columns are responsive with preset defaults. Without JavaScript every member stays visible.
 
 | Preset | Team |
 | --- | --- |
@@ -589,8 +589,8 @@ Composer validation, 84 smoke assertions, the production build, and JavaScript s
 
 On WordPress 7.1.4, Elementor Free 4.4.0, and PHP 8.3.17, the team suite passed 27 assertions and the preset suite passed 421. The media, interactive, cards, blog, context, meta, feature, button, and testimonials regression suites passed, as did native template import with 59 assertions. The local `wp-config.php` derives the site URL from `$_SERVER`, so the suites ran with `REQUEST_SCHEME=http` and `HTTP_HOST=plugin.test`. Without them the media, context, and meta suites fail on the empty home URL. The first context run right after the plugin sync could not open `blog-grid.php`. The next two runs passed.
 
-The Chrome frontend fixture placed all five presets on one page with four members, one without a portrait. The presets rendered distinct layouts. The Board, Volunteers, and All filters updated `aria-pressed` and the visible members, and the Enter key activated a focused filter. Filtering one instance did not affect another. The page loaded only the Nova tokens stylesheet and the Team assets. At 375 px every preset used one column with no horizontal overflow, and Dark stacked its image. The console had no errors.
-
-In the Elementor editor the filter initially failed in the preview. Re-rendered widgets contain nodes from the parent window's realm, so the `instanceof Element` check in `team.js` rejected every click. The handler now calls `closest` directly. After the fix, the filter worked in the preview after a content change and after a preset change. A member title changed in the repeater and the preset changed to Bold Creative through the visual picker, both in the live preview. Both changes were published and appeared on the anonymous page and after reopening the editor.
-
+The Chrome frontend fixture placed all five presets on one page with four members, one without a portrait. The presets rendered distinct layouts. The Board, Volunteers, and All filters updated `aria-pressed` and the visible members, and the Enter key activated a focused filter. Filtering one instance did not affect another. The page loaded only the Nova tokens stylesheet and the Team assets. At 375 px every preset used one column with no horizontal overflow, and Dark stacked its image. The console had no errors.
+
+In the Elementor editor the filter initially failed in the preview. Re-rendered widgets contain nodes from the parent window's realm, so the `instanceof Element` check in `team.js` rejected every click. The handler now calls `closest` directly. After the fix, the filter worked in the preview after a content change and after a preset change. A member title changed in the repeater and the preset changed to Bold Creative through the visual picker, both in the live preview. Both changes were published and appeared on the anonymous page and after reopening the editor.
+
 The assets keep version 0.4.0, so a browser that cached the earlier `team.min.js` keeps it until the plugin version changes. Manual screen-reader checks, physical touch devices, other browser engines, measured overlay contrast in Bold Creative, and the minimum supported platform versions remain unverified. The template library does not accept `ne-team`.
